@@ -11,6 +11,11 @@
   padding: 0;
 }
 
+.meals ul li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
 @keyframes meals-appear {
   from {
     opacity: 0;
