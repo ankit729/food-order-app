@@ -1,4 +1,4 @@
-import CartIcon from "../../Cart/CartIcon";
+import CartIcon from "../Cart/CartIcon";
 import styles from "./HeaderCartButton.module.css";
 
 function HeaderCartButton(props) {
