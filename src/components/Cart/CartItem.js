@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import CartContext from "../../store/cart-context";
+import BinIcon from "./BinIcon";
 import styles from "./CartItem.module.css";
 
 function CartItem(props) {
@@ -17,6 +18,14 @@ function CartItem(props) {
         </div>
       </div>
       <div className={styles.actions}>
+        <button
+          style={{ border: "none" }}
+          onClick={() => cartContext.removeItem(props.id)}
+        >
+          <span className={styles.icon}>
+            <BinIcon />
+          </span>
+        </button>
         <button
           onClick={() =>
             cartContext.updateItemAmount({
