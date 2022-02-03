@@ -1,6 +1,6 @@
 import { useContext } from "react";
+import BinIcon from "../../assets/BinIcon";
 import CartContext from "../../store/cart-context";
-import BinIcon from "./BinIcon";
 import styles from "./CartItem.module.css";
 
 function CartItem(props) {

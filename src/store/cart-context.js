@@ -44,10 +44,11 @@ function cartReducer(state, action) {
       return state;
     }
     const removedItem = state.items[index];
-    state.items.splice(index, 1);
+    const updatedItems = [...state.items];
+    updatedItems.splice(index, 1);
 
     return {
-      items: state.items,
+      items: updatedItems,
       numberOfItems: state.numberOfItems - removedItem.amount,
       totalAmount: state.totalAmount - removedItem.price * removedItem.amount,
     };
