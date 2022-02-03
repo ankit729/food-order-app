@@ -6,7 +6,7 @@ import MealItemForm from "./MealItemForm";
 function MealItem(props) {
   const cartContext = useContext(CartContext);
   function addToCartHandler(amount) {
-    cartContext.addItem({
+    cartContext.updateItemAmount({
       id: props.id,
       name: props.name,
       amount: amount,

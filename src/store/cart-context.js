@@ -1,26 +1,42 @@
 import { createContext, useContext, useReducer } from "react";
+import { act } from "react-dom/cjs/react-dom-test-utils.production.min";
 
 const CartContext = createContext({
   items: [],
+  numberOfItems: 0,
   totalAmount: 0,
   addItem: (item) => {},
-  removeItem: (id) => {},
 });
 
 const defaultCart = {
   items: [],
+  numberOfItems: 0,
   totalAmount: 0,
 };
 
 function cartReducer(state, action) {
   switch (action.type) {
-    case "ADD":
+    case "UPDATE_AMOUNT":
+      const updatedNumberOfItems = state.numberOfItems + action.item.amount;
+      const updatedTotalAmount =
+        state.totalAmount + action.item.price * action.item.amount;
+      let updatedItems;
+      const index = state.items.findIndex((item) => item.id === action.item.id);
+      if (index > -1) {
+        updatedItems = [...state.items];
+        updatedItems[index].amount += action.item.amount;
+        if (updatedItems[index].amount === 0) {
+          updatedItems.splice(index, 1);
+        }
+      } else {
+        updatedItems = state.items.concat(action.item);
+      }
+
       return {
-        items: state.items.concat(action.item),
-        totalAmount: state.totalAmount + action.item.price * action.item.amount,
+        items: updatedItems,
+        numberOfItems: updatedNumberOfItems,
+        totalAmount: updatedTotalAmount,
       };
-    case "REMOVE":
-      break;
     default:
   }
   return defaultCart;
@@ -29,21 +45,17 @@ function cartReducer(state, action) {
 export function CartProvider(props) {
   const [cart, dispatchCart] = useReducer(cartReducer, defaultCart);
 
-  function addItem(item) {
-    dispatchCart({ type: "ADD", item: item });
-  }
-
-  function removeItem(id) {
-    dispatchCart({ type: "REMOVE", id: id });
+  function updateItemAmount(item) {
+    dispatchCart({ type: "UPDATE_AMOUNT", item: item });
   }
 
   return (
     <CartContext.Provider
       value={{
         items: cart.items,
+        numberOfItems: cart.numberOfItems,
         totalAmount: cart.totalAmount,
-        addItem: addItem,
-        removeItem: removeItem,
+        updateItemAmount: updateItemAmount,
       }}
     >
       {props.children}
