@@ -1,5 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
-import { act } from "react-dom/cjs/react-dom-test-utils.production.min";
+import { createContext, useReducer } from "react";
 
 const CartContext = createContext({
   items: [],
