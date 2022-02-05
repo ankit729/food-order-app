@@ -1,18 +1,16 @@
 import { createContext, useReducer } from "react";
 
-const CartContext = createContext({
-  items: [],
-  numberOfItems: 0,
-  totalAmount: 0,
-  updateItemAmount: (item) => {},
-  removeItem: (id) => {},
-});
-
 const defaultCart = {
   items: [],
   numberOfItems: 0,
   totalAmount: 0,
 };
+
+const CartContext = createContext({
+  ...defaultCart,
+  updateItemAmount: (item) => {},
+  removeItem: (id) => {},
+});
 
 function cartReducer(state, action) {
   if (action.type === "UPDATE_ITEM_AMOUNT") {
@@ -59,22 +57,14 @@ function cartReducer(state, action) {
 export function CartProvider(props) {
   const [cart, dispatchCart] = useReducer(cartReducer, defaultCart);
 
-  function updateItemAmount(item) {
-    dispatchCart({ type: "UPDATE_ITEM_AMOUNT", item: item });
-  }
-
-  function removeItem(id) {
-    dispatchCart({ type: "REMOVE_ITEM", id: id });
-  }
-
   return (
     <CartContext.Provider
       value={{
         items: cart.items,
         numberOfItems: cart.numberOfItems,
         totalAmount: cart.totalAmount,
-        updateItemAmount: updateItemAmount,
-        removeItem: removeItem,
+        updateItemAmount: (item)=>dispatchCart({ type: "UPDATE_ITEM_AMOUNT", item: item }),
+        removeItem: (id)=>dispatchCart({ type: "REMOVE_ITEM", id: id }),
       }}
     >
       {props.children}
