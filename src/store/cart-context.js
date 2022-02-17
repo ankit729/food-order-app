@@ -1,4 +1,5 @@
 import { createContext, useReducer } from "react";
+import { act } from "react-dom/cjs/react-dom-test-utils.production.min";
 
 const defaultCart = {
   items: [],
@@ -10,6 +11,7 @@ const CartContext = createContext({
   ...defaultCart,
   updateItemAmount: (item) => {},
   removeItem: (id) => {},
+  resetCart: () => {},
 });
 
 function cartReducer(state, action) {
@@ -51,6 +53,11 @@ function cartReducer(state, action) {
       totalAmount: state.totalAmount - removedItem.price * removedItem.amount,
     };
   }
+
+  if (action.type === "RESET") {
+    return defaultCart;
+  }
+
   return defaultCart;
 }
 
@@ -63,8 +70,12 @@ export function CartProvider(props) {
         items: cart.items,
         numberOfItems: cart.numberOfItems,
         totalAmount: cart.totalAmount,
-        updateItemAmount: (item)=>dispatchCart({ type: "UPDATE_ITEM_AMOUNT", item: item }),
-        removeItem: (id)=>dispatchCart({ type: "REMOVE_ITEM", id: id }),
+        updateItemAmount: (item) =>
+          dispatchCart({ type: "UPDATE_ITEM_AMOUNT", item: item }),
+        removeItem: (id) => dispatchCart({ type: "REMOVE_ITEM", id: id }),
+        resetCart: () => {
+          dispatchCart({ type: "RESET" });
+        },
       }}
     >
       {props.children}
